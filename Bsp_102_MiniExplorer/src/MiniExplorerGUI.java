@@ -17,17 +17,22 @@ public class MiniExplorerGUI extends javax.swing.JFrame {
      * Creates new form GUI
      */
     public FileModel fm = new FileModel();
-    File dir = new File("C:\\Users\\JoZuG\\Desktop\\Bsp_102_MiniExplorer\\test");
+    File dir = new File(".");
     
     public MiniExplorerGUI() {
         initComponents();
         fileList.setModel(fm);
         
+        fm.addFile(new FileF(dir.getAbsolutePath() + "/.."));
+        
         for (File f : dir.listFiles()) {
-            if (f.isDirectory()) System.out.println("D   ");
-            else System.out.println("F   ");
-            System.out.println(f.getAbsoluteFile());
+            fm.addFile(new FileF(f.getAbsolutePath()));
         }
+//        for (File f : dir.listFiles()) {
+//            if (f.isDirectory()) System.out.println("D   ");
+//            else System.out.println("F   ");
+//            System.out.println(f.getAbsoluteFile());
+//        }
     }
 
     /**
