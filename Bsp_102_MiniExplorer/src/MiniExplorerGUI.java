@@ -6,7 +6,6 @@ import java.io.File;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author JoZuG
@@ -17,22 +16,31 @@ public class MiniExplorerGUI extends javax.swing.JFrame {
      * Creates new form GUI
      */
     public FileModel fm = new FileModel();
-    File dir = new File(".");
-    
+    private File dir = new File(".");
+
     public MiniExplorerGUI() {
         initComponents();
         fileList.setModel(fm);
-        
-        fm.addFile(new FileF(dir.getAbsolutePath() + "/.."));
-        
-        for (File f : dir.listFiles()) {
-            fm.addFile(new FileF(f.getAbsolutePath()));
-        }
+        fileList.setCellRenderer(new FileListRenderer());
+
+        this.addThings(dir);
 //        for (File f : dir.listFiles()) {
 //            if (f.isDirectory()) System.out.println("D   ");
 //            else System.out.println("F   ");
 //            System.out.println(f.getAbsoluteFile());
 //        }
+    }
+
+    public void addThings(File di) {
+        dir = di;
+        fm.clearList();
+
+        fm.addFile(new FileF(dir.getAbsolutePath() + "\\.."));
+
+        for (File f : dir.listFiles()) {
+            fm.addFile(new FileF(f.getAbsolutePath()));
+            System.out.println(f.getAbsolutePath());
+        }
     }
 
     /**
@@ -49,10 +57,10 @@ public class MiniExplorerGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        fileList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        fileList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                fileListMouseClicked(evt);
+            }
         });
         jScrollPane1.setViewportView(fileList);
 
@@ -69,6 +77,16 @@ public class MiniExplorerGUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void fileListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fileListMouseClicked
+        if (evt.getClickCount() == 2) {
+            if (fileList.getSelectedValue().getName().equals("\\..")) {
+                addThings(new File(dir.getParent()));
+            } else if (fileList.getSelectedValue().isDirectory()) {
+                addThings(new File(dir+"\\"+fileList.getSelectedValue().getName()));
+            }
+        }
+    }//GEN-LAST:event_fileListMouseClicked
 
     /**
      * @param args the command line arguments
@@ -107,7 +125,7 @@ public class MiniExplorerGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList<String> fileList;
+    private javax.swing.JList<FileF> fileList;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

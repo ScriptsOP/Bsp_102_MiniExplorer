@@ -1,9 +1,14 @@
 
-public class FileComparer implements Comparable<FileF> {
+import java.util.Comparator;
+
+
+public class FileComparer implements Comparator<FileF> {
 
     @Override
-    public int compareTo(FileF o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int compare(FileF o1, FileF o2) {
+        if (o1.isDirectory() && !o2.isDirectory()) return -1;
+        if (o2.isDirectory() && !o1.isDirectory()) return 1;
+        return 0;
     }
     
 }
